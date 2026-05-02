@@ -1,0 +1,15 @@
+{
+  "id": "command_received",
+  "title": {
+    "en": "When R1 sends a voice command",
+    "it": "Quando R1 invia un comando vocale"
+  },
+  "tokens": [
+    {
+      "name": "command",
+      "type": "string",
+      "title": { "en": "Command", "it": "Comando" },
+      "example": { "en": "turn on the living room light", "it": "accendi la luce del salotto" }
+    }
+  ]
+}

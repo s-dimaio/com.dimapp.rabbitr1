@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=240, height=282, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Homey R1</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div id="app" class="app-container">
+        <header class="header">
+            <div class="header-left">
+                <div id="statusIndicator" class="status-indicator"></div>
+                <h1 id="headerTitle">Homey Control</h1>
+            </div>
+            <button id="settingsBtn" class="settings-btn" style="display: none;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                </svg>
+            </button>
+            <button id="backToChatBtn" class="settings-btn" style="display: none;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+            </button>
+        </header>
+
+        <main class="content">
+            <!-- Setup screen -->
+            <div id="setupScreen" class="screen active">
+                <h2 data-i18n="setup_title">Configurazione</h2>
+                <p data-i18n="setup_desc" style="margin-bottom: 12px;">Configura il tuo Rabbit R1.</p>
+                <div class="input-group">
+                    <input type="text" id="homeyNameInput" data-i18n="homey_name_placeholder" placeholder="Nome casa (opzionale)" maxlength="20">
+                </div>
+                <button id="setupBtn" class="btn" data-i18n="scan_btn">Scansiona QR Code</button>
+            </div>
+
+            <!-- Scanner screen -->
+            <div id="scannerScreen" class="screen">
+                <div class="qr-scanner-container" id="qrContainer">
+                    <video id="qrVideo" autoplay playsinline></video>
+                    <div class="qr-overlay" data-i18n="qr_overlay">Inquadra il QR Code</div>
+                    <button id="cancelQrBtn" class="btn secondary qr-cancel" data-i18n="cancel_scan">Annulla Scan</button>
+                </div>
+            </div>
+
+            <!-- Main screen -->
+            <div id="mainScreen" class="screen">
+                <div class="status-text" id="statusText" style="display: none;"></div>
+                
+                <div id="chatContainer" class="chat-container">
+                    <!-- I messaggi verranno inseriti qui -->
+                    <div id="chatWelcome" class="chat-message system-message" data-i18n="welcome">
+                        In attesa del tuo comando...
+                    </div>
+                </div>
+
+                <div id="loadingIndicator" class="loading-indicator hidden">
+                    <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+                </div>
+            </div>
+
+
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Remote Logging Interceptor
+        (function() {
+            const originalLog = console.log;
+            const originalError = console.error;
+            const originalWarn = console.warn;
+            
+            function sendLog(level, args) {
+                const message = Array.from(args).map(arg => {
+                    if (typeof arg === 'object') {
+                        try { return JSON.stringify(arg); } catch(e) { return String(arg); }
+                    }
+                    return String(arg);
+                }).join(' ');
+                
+                // Fire and forget to the remote server
+                fetch('/log', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ level, message })
+                }).catch(e => originalError.call(console, 'Remote log failed:', e));
+            }
+            
+            console.log = function() {
+                originalLog.apply(console, arguments);
+                sendLog('log', arguments);
+            };
+            
+            console.error = function() {
+                originalError.apply(console, arguments);
+                sendLog('error', arguments);
+            };
+            
+            console.warn = function() {
+                originalWarn.apply(console, arguments);
+                sendLog('warn', arguments);
+            };
+            
+            // Log unhandled exceptions
+            window.addEventListener('error', function(event) {
+                console.error('Unhandled Error:', event.message, 'at', event.filename, ':', event.lineno);
+            });
+            
+            window.addEventListener('unhandledrejection', function(event) {
+                console.error('Unhandled Promise Rejection:', event.reason);
+            });
+        })();
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/tts.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

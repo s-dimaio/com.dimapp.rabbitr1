@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript" src="/homey.js" data-origin="settings"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            overflow-x: hidden;
+            background-color: #fff;
+        }
+
+        .content {
+            flex: 1;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* SPA Navigation */
+        .view { display: none; }
+        .view.is-active { display: block; }
+
+        /* Menu Items (Homey Style) */
+        .menu-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            padding: 16px;
+            background-color: #f9f9f9;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .menu-item:hover { background-color: #f0f0f0; border-color: #FF4D06; }
+        
+        .menu-item-icon {
+            font-size: 24px;
+            margin-right: 16px;
+            color: #FF4D06;
+            display: flex;
+            align-items: center;
+        }
+
+        .menu-item-text { flex: 1; }
+        .menu-item-title { display: block; font-weight: 600; font-size: 16px; color: #333; }
+        .menu-item-subtitle { display: block; font-size: 13px; color: #666; margin-top: 2px; }
+        .menu-item-arrow { color: #ccc; font-size: 20px; font-weight: bold; }
+
+        /* Back Item Style */
+        .back-item {
+            margin-bottom: 25px;
+            border-color: rgba(0,0,0,0.05);
+            background-color: #fff;
+        }
+        .back-item .menu-item-title { color: #FF4D06; }
+        .back-item .menu-item-arrow { color: #FF4D06; margin-right: 10px; margin-left: 0; }
+
+        /* Header & Titles */
+        .homey-header { margin-bottom: 24px; }
+        .homey-title { font-size: 24px; font-weight: 700; margin: 0; }
+        .subtitle { font-size: 14px; color: #666; margin-top: 8px; line-height: 1.4; }
+
+        /* QR Section */
+        .qr-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px 0;
+            padding: 20px;
+            background: #fff;
+            border: 1px solid #eee;
+            border-radius: 12px;
+        }
+
+        #qrcode-install, #qrcode-config {
+            padding: 10px;
+            background: #fff;
+        }
+
+        /* Buttons & Forms */
+        .homey-button-primary-full {
+            width: 100%;
+            padding: 12px;
+            background-color: #FF4D06;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .homey-button-secondary {
+            padding: 8px 16px;
+            background-color: #eee;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .homey-button-transparent {
+            background: none;
+            border: none;
+            color: #FF4D06;
+            cursor: pointer;
+            font-size: 14px;
+            padding: 10px 0;
+            text-decoration: underline;
+        }
+
+        .homey-form-group { margin-bottom: 20px; }
+        .homey-form-label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: #333; }
+        .homey-form-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-family: monospace;
+            box-sizing: border-box;
+            background: #fafafa;
+        }
+
+        .homey-form-help { font-size: 12px; color: #888; margin-top: 4px; display: block; }
+    </style>
+</head>
+<body>
+    <div class="content">
+        
+        <!-- VIEW: MENU -->
+        <div id="view-menu" class="view is-active">
+            <div class="menu-list">
+                <div id="nav-install" class="menu-item">
+                    <div class="menu-item-content" style="display: flex; align-items: center; flex: 1;">
+                        <div class="menu-item-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                            </svg>
+                        </div>
+                        <div class="menu-item-text">
+                            <span class="menu-item-title" data-i18n="settings.menu.install_title"></span>
+                            <span class="menu-item-subtitle" data-i18n="settings.menu.install_desc"></span>
+                        </div>
+                    </div>
+                    <div class="menu-item-arrow">›</div>
+                </div>
+
+                <div id="nav-config" class="menu-item">
+                    <div class="menu-item-content" style="display: flex; align-items: center; flex: 1;">
+                        <div class="menu-item-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                            </svg>
+                        </div>
+                        <div class="menu-item-text">
+                            <span class="menu-item-title" data-i18n="settings.menu.config_title"></span>
+                            <span class="menu-item-subtitle" data-i18n="settings.menu.config_desc"></span>
+                        </div>
+                    </div>
+                    <div class="menu-item-arrow">›</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW: INSTALL -->
+        <div id="view-install" class="view">
+            <div class="menu-item back-item back-btn">
+                <div class="menu-item-arrow">‹</div>
+                <div class="menu-item-text">
+                    <span class="menu-item-title" data-i18n="settings.common.back"></span>
+                </div>
+            </div>
+
+            <header class="homey-header">
+                <h1 class="homey-title" data-i18n="settings.install.title"></h1>
+                <p class="subtitle" data-i18n="settings.install.desc"></p>
+            </header>
+
+            <div class="qr-container">
+                <div id="qrcode-install"></div>
+            </div>
+        </div>
+
+        <!-- VIEW: CONFIG -->
+        <div id="view-config" class="view">
+            <div class="menu-item back-item back-btn">
+                <div class="menu-item-arrow">‹</div>
+                <div class="menu-item-text">
+                    <span class="menu-item-title" data-i18n="settings.common.back"></span>
+                </div>
+            </div>
+
+            <header class="homey-header">
+                <h1 class="homey-title" data-i18n="settings.config.title"></h1>
+                <p class="subtitle" data-i18n="settings.config.desc"></p>
+            </header>
+
+            <div class="qr-container">
+                <div id="qrcode-config"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script type="text/javascript">
+        let currentToken = '';
+        let homeyName = '';
+
+        function switchView(viewId) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('is-active'));
+            document.getElementById(viewId).classList.add('is-active');
+        }
+
+        function updateQRInstall() {
+            const qrContainer = document.getElementById("qrcode-install");
+            qrContainer.innerHTML = "";
+            
+            // Recuperiamo l'ID dell'app dal manifest per evitare hardcoding
+            const appId = 'com.dimapp.rabbitr1'; // Sarebbe meglio Homey.manifest.id se disponibile
+            const baseUrl = window.location.origin;
+            const appUrl = `${baseUrl}/app/${appId}/assets/r1/index.html`;
+            const iconUrl = `${baseUrl}/app/${appId}/assets/icon.svg`;
+
+            const payload = JSON.stringify({
+                title: "Homey Control",
+                url: appUrl,
+                description: "Controllo vocale per Homey Pro",
+                iconUrl: iconUrl,
+                themeColor: "#FF4D06"
+            });
+
+            new QRCode(qrContainer, {
+                text: payload,
+                width: 250,
+                height: 250,
+                colorDark : "#000000",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.L
+            });
+        }
+
+        function updateQRConfig() {
+            if (!currentToken) return;
+            
+            const qrContainer = document.getElementById("qrcode-config");
+            qrContainer.innerHTML = "";
+            
+            const homeyUrl = window.location.origin;
+
+            const payload = JSON.stringify({
+                i: homeyUrl,
+                t: currentToken
+            });
+
+            new QRCode(qrContainer, {
+                text: payload,
+                width: 250,
+                height: 250,
+                colorDark : "#000000",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.L
+            });
+        }
+
+        function onHomeyReady(Homey) {
+            Homey.ready();
+
+            document.getElementById('nav-install').addEventListener('click', () => {
+                updateQRInstall();
+                switchView('view-install');
+            });
+
+            document.getElementById('nav-config').addEventListener('click', () => {
+                updateQRConfig();
+                switchView('view-config');
+            });
+
+            document.querySelectorAll('.back-btn').forEach(btn => {
+                btn.addEventListener('click', () => switchView('view-menu'));
+            });
+
+            function loadSettings() {
+                Homey.get('r1_token', function(err, token) {
+                    if(token) {
+                        currentToken = token;
+                    }
+                });
+                Homey.get('homey_name', function(err, name) {
+                    if(name) {
+                        homeyName = name;
+                    }
+                });
+            }
+
+            loadSettings();
+
+
+        }
+    </script>
+</body>
+</html>

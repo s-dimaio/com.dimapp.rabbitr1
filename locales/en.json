@@ -1,0 +1,21 @@
+{
+  "settings": {
+    "menu": {
+      "install_title": "1. Installation (Creation)",
+      "install_desc": "Install the app on your Rabbit R1",
+      "config_title": "2. Quick Configuration",
+      "config_desc": "Configure the app to be used with Homey Pro"
+    },
+    "install": {
+      "title": "Installation on Rabbit R1",
+      "desc": "Open your Rabbit R1, enter Creations and scan this QR Code to install the app."
+    },
+    "config": {
+      "title": "App Configuration",
+      "desc": "Scan this QR Code to complete the app configuration on the Rabbit R1."
+    },
+    "common": {
+      "back": "Back to settings"
+    }
+  }
+}

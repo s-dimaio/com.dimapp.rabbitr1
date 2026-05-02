@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Rabbit R1 - Publish Creation</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        body { font-family: -apple-system, sans-serif; display: flex; flex-direction: column; align-items: center; padding: 40px; background: #f4f4f9; color: #333; }
+        .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); max-width: 500px; text-align: center; }
+        #qrcode { margin: 25px 0; padding: 15px; background: white; display: inline-block; border: 1px solid #eee; }
+        .url-box { background: #eee; padding: 10px; border-radius: 6px; font-family: monospace; font-size: 13px; word-break: break-all; margin: 15px 0; }
+        h1 { color: #FF4D06; margin-top: 0; }
+        p { line-height: 1.5; color: #666; }
+        .step { font-weight: bold; color: #333; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Rabbit R1 Creation</h1>
+        <p>Usa questa pagina per registrare la tua app Homey nel portale <strong>rabbithole</strong>.</p>
+        
+        <div class="step">1. Il tuo URL rilevato:</div>
+        <div id="urlDisplay" class="url-box">Rilevamento in corso...</div>
+
+        <div class="step">2. Inquadra questo QR dal portale Rabbit:</div>
+        <div id="qrcode"></div>
+        
+        <p style="font-size: 12px;">Questo QR Code contiene l'indirizzo diretto del tuo Homey Pro e le impostazioni grafiche per il Rabbit R1.</p>
+    </div>
+
+    <script>
+        // Rileva l'URL corrente e punta a index.html nella stessa cartella
+        const currentUrl = window.location.href;
+        const creationUrl = currentUrl.replace('publish.html', 'index.html');
+        
+        document.getElementById('urlDisplay').textContent = creationUrl;
+
+        const payload = JSON.stringify({
+            title: "Homey Control",
+            url: creationUrl,
+            description: "Controllo vocale per Homey Pro",
+            iconUrl: "https://raw.githubusercontent.com/StyraHem/com.dimapp.rabbit/main/assets/icon.svg",
+            themeColor: "#FF4D06"
+        });
+
+        new QRCode(document.getElementById("qrcode"), {
+            text: payload,
+            width: 300,
+            height: 300,
+            colorDark : "#000000",
+            colorLight : "#ffffff",
+            correctLevel : QRCode.CorrectLevel.L
+        });
+    </script>
+</body>
+</html>

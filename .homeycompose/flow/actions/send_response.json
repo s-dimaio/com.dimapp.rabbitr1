@@ -1,0 +1,23 @@
+{
+  "id": "send_response",
+  "title": {
+    "en": "Send a response to R1",
+    "it": "Invia una risposta a R1"
+  },
+  "hint": {
+    "en": "This card can only be used in a Flow triggered by 'When R1 sends a voice command'.",
+    "it": "Questa scheda può essere utilizzata solo in un Flow attivato da 'Quando R1 invia un comando vocale'."
+  },
+  "titleFormatted": {
+    "en": "Your Rabbit R1 will say: [[response_text]]",
+    "it": "Il tuo Rabbit R1 dirà: [[response_text]]"
+  },
+  "args": [
+    {
+      "name": "response_text",
+      "type": "text",
+      "title": { "en": "Response text", "it": "Testo della risposta" },
+      "placeholder": { "en": "Done! The light is on.", "it": "Fatto! La luce è accesa." }
+    }
+  ]
+}

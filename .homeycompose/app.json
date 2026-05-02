@@ -1,0 +1,51 @@
+{
+  "id": "com.dimapp.rabbitr1",
+  "version": "1.0.0",
+  "compatibility": ">=12.0.0",
+  "sdk": 3,
+  "platforms": [
+    "local"
+  ],
+  "name": {
+    "en": "Rabbit R1"
+  },
+  "description": {
+    "en": "Experience the power of Homey on your Rabbit R1",
+    "it": "Porta la potenza di Homey sul tuo Rabbit R1"
+  },
+  "category": "tools",
+  "images": {
+    "small": "assets/images/small.png",
+    "large": "assets/images/large.png",
+    "xlarge": "assets/images/xlarge.png"
+  },
+  "permissions": [],
+  "api": {
+    "getResponse": {
+      "method": "GET",
+      "path": "/response",
+      "public": true
+    },
+    "postCommand": {
+      "method": "POST",
+      "path": "/command",
+      "public": true
+    },
+    "getWebhookUrl": {
+      "method": "GET",
+      "path": "/webhook-url"
+    }
+  },
+  "brandColor": "#ff4d06",
+  "contributing": {
+    "donate": {
+      "paypal": {
+        "username": "sdimaio77"
+      }
+    }
+  },
+  "author": {
+    "name": "Simone Di Maio",
+    "email": "simone.dimaio77@gmail.com"
+  }
+}
