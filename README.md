@@ -52,7 +52,7 @@ The Homey backend logic:
 - `api.js`: REST API endpoints for receiving commands from R1.
 
 ## License
-This project is licensed under the MIT License.
+This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details.
 
 ---
 Developed with ❤️ for the Homey & Rabbit communities.

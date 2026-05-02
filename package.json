@@ -1,0 +1,20 @@
+{
+  "name": "com.dimapp.rabbitr1",
+  "version": "1.0.1",
+  "description": "Rabbit R1 Integration for Homey Pro",
+  "main": "app.js",
+  "scripts": {
+    "test": "homey app validate",
+    "run": "homey app run",
+    "install": "homey app install"
+  },
+  "author": "Simone Di Maio <simone.dimaio77@gmail.com>",
+  "license": "GPL-3.0-or-later",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "homey": "^3.0.0"
+  }
+}

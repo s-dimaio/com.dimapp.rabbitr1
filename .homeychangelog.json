@@ -1,6 +1,6 @@
 {
-  "1.0.0": {
-    "en": "Initial release of the Android Automotive app for Android Automotive OS.",
-    "it": "Prima release dell'app Android Automotive per Android Automotive OS."
+  "1.0.1": {
+    "en": "(i) Initial release \n(ii) Support for voice commands via Rabbit R1 \n(iii) Integrated Text-to-Speech (TTS) for Homey responses \n(iv) Easy setup via QR Code",
+    "it": "(i) Versione iniziale \n(ii) Supporto per comandi vocali tramite Rabbit R1 \n(iii) Sintesi vocale (TTS) integrata per le risposte di Homey \n(iv) Configurazione rapida tramite QR Code"
   }
 }
