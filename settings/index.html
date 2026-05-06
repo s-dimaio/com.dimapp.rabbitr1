@@ -237,14 +237,14 @@
             const appId = 'com.dimapp.rabbitr1'; // Sarebbe meglio Homey.manifest.id se disponibile
             const baseUrl = window.location.origin;
             const appUrl = `${baseUrl}/app/${appId}/assets/r1/index.html`;
-            const iconUrl = `${baseUrl}/app/${appId}/assets/icon.svg`;
+            const iconUrl = `${baseUrl}/app/${appId}/assets/images/homey.png`;
 
             const payload = JSON.stringify({
                 title: "Homey Control",
                 url: appUrl,
                 description: "Controllo vocale per Homey Pro",
                 iconUrl: iconUrl,
-                themeColor: "#FF4D06"
+                themeColor: "#FFFFFF"
             });
 
             new QRCode(qrContainer, {

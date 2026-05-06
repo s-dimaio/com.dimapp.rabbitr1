@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "com.dimapp.rabbitr1",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "compatibility": ">=12.0.0",
   "sdk": 3,
   "platforms": [
@@ -81,8 +81,8 @@
           "it": "Invia una risposta a R1"
         },
         "hint": {
-          "en": "This card can only be used in a Flow triggered by 'A command has been received'.",
-          "it": "Questa scheda può essere utilizzata solo in un Flow attivato da 'Un comando è stato ricevuto'."
+          "en": "This card can only be used in a Flow triggered by 'When R1 sends a voice command'.",
+          "it": "Questa scheda può essere utilizzata solo in un Flow attivato da 'Quando R1 invia un comando vocale'."
         },
         "titleFormatted": {
           "en": "Your Rabbit R1 will say: [[response_text]]",
