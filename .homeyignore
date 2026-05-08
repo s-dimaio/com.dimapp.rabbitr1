@@ -12,3 +12,4 @@ node_modules/
 /.agent
 /images
 release.ps1
+homey_community_post.md

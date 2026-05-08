@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Guard: should never be called if camera is not available
         if (!cameraAvailable) {
             console.error('startQRScanner called but camera API is unavailable.');
-            alert(i18n.get('error_no_camera'));
+            showToast(i18n.get('error_no_camera'));
             showScreen('setupScreen');
             return;
         }
@@ -143,7 +143,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         } catch (err) {
             console.error('Camera access error:', err);
             stopQRScanner();
-            alert(i18n.get('error_camera_access'));
+            showToast(i18n.get('error_camera_access'));
             showScreen('setupScreen');
         }
     }
@@ -157,6 +157,20 @@ document.addEventListener('DOMContentLoaded', async () => {
             localMediaStream.getTracks().forEach(track => track.stop());
             localMediaStream = null;
         }
+    }
+
+    const toastNotification = document.getElementById('toastNotification');
+    let toastTimeout;
+
+    function showToast(message, isError = true) {
+        toastNotification.textContent = message;
+        toastNotification.style.backgroundColor = isError ? '#E91E63' : '#4CAF50';
+        toastNotification.classList.add('show');
+        
+        clearTimeout(toastTimeout);
+        toastTimeout = setTimeout(() => {
+            toastNotification.classList.remove('show');
+        }, 3000);
     }
 
     async function handleQRScanned(dataString) {
@@ -177,10 +191,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                 showScreen('mainScreen');
                 setStatus('ready', i18n.get('status_ready'));
             } else {
-                alert(i18n.get('error_invalid_qr'));
+                showToast(i18n.get('error_invalid_qr'));
+                setTimeout(() => { startQRScanner(); }, 2500);
             }
         } catch(e) {
-            alert(i18n.get('error_qr_read'));
+            showToast(i18n.get('error_qr_read'));
+            setTimeout(() => { startQRScanner(); }, 2500);
         }
     }
 
@@ -385,11 +401,20 @@ document.addEventListener('DOMContentLoaded', async () => {
     settingsBtn.addEventListener('click', () => {
         console.log('UI Event: Settings button clicked');
         // Non cancelliamo la config, permettiamo solo di sovrascriverla scansionando un nuovo QR
+        homeyNameInput.value = Config.homeyName;
         showScreen('setupScreen');
     });
 
-    backToChatBtn.addEventListener('click', () => {
+    backToChatBtn.addEventListener('click', async () => {
         console.log('UI Event: Back to Chat button clicked');
+        
+        const newName = homeyNameInput.value.trim() || 'Homey Control';
+        if (newName !== Config.homeyName && Config.isConfigured) {
+            console.log('UI Event: Homey name updated to:', newName);
+            await Config.save(Config.homeyIp, Config.token, newName);
+            headerTitle.textContent = Config.homeyName;
+        }
+
         showScreen('mainScreen');
     });
 

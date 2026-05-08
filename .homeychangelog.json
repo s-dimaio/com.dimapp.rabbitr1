@@ -6,5 +6,9 @@
   "1.0.2": {
     "en": "Added Homey icon on white background in the Rabbit R1 creation card",
     "it": "Aggiunta l'icona di Homey su sfondo bianco nella scheda della creation su Rabbit R1"
+  },
+  "1.0.3": {
+    "en": "(i) Replaced native alerts with custom toast notifications for a premium UI \n(ii) Added automatic QR scanner restart on invalid scan \n(iii) Improved home name management in settings (auto-populate and quick save)",
+    "it": "(i) Sostituiti gli alert con notifiche toast personalizzate per una UI più curata \n(ii) Aggiunto il riavvio automatico dello scanner in caso di QR non valido \n(iii) Migliorata la gestione del nome della casa nelle impostazioni"
   }
 }

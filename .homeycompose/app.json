@@ -1,6 +1,6 @@
 {
   "id": "com.dimapp.rabbitr1",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "compatibility": ">=12.0.0",
   "sdk": 3,
   "platforms": [
@@ -47,5 +47,10 @@
   "author": {
     "name": "Simone Di Maio",
     "email": "simone.dimaio77@gmail.com"
+  },
+  "homeyCommunityTopicId": 154662,
+  "source": "https://github.com/s-dimaio/com.dimapp.rabbitr1",
+  "bugs": {
+    "url": "https://github.com/s-dimaio/com.dimapp.rabbitr1/issues"
   }
 }

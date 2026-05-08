@@ -1,6 +1,6 @@
 {
   "name": "com.dimapp.rabbitr1",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Rabbit R1 Integration for Homey Pro",
   "main": "app.js",
   "scripts": {
